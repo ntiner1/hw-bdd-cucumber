@@ -30,17 +30,18 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   ratings = rating_list.split(", ")
   if uncheck
     ratings.each do |rating|
-      When I uncheck rating
+      uncheck("ratings[#{rating}]")
     end
   else
     ratings.each do |rating|
-      When I check rating
-      #check("ratings[G]")
+      check("ratings[#{rating}]")
     end
   end
 end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  rows = page.all('table#movies tr').count
+  # + 1 is for the table header
+  expect(rows).to eq (Movie.count + 1)
 end
